@@ -1,0 +1,36 @@
+﻿@using Application.Models
+@using Domaine.Entities
+@using Newtonsoft.Json
+@{
+	if (HttpContext.Current.Request.Cookies[".ASPXAUTH"] != null)
+	{
+		FormsAuthenticationTicket ticket = null;
+		var toDecrypt = HttpContext.Current.Request.Cookies[".ASPXAUTH"].Value;
+		if (toDecrypt != null)
+		{
+			try
+			{
+				ticket = FormsAuthentication.Decrypt(toDecrypt);
+			}
+			catch (Exception)
+			{
+				Layout = "~/Views/Login/Index.cshtml";
+			}
+
+			if (ticket != null)
+			{
+				ViewContext.ViewBag.Role = JsonConvert.DeserializeObject<ProfileModel>(ticket.UserData).Role.ToString();
+			}
+		}
+	}
+
+	if (ViewContext.ViewBag.Role == Role.Admin.ToString())
+	{
+		Layout = "~/Views/Shared/_Layout.cshtml";
+	}
+	else
+	{
+		Layout = "~/Views/Shared/_LayoutUser.cshtml";
+	}
+
+}
