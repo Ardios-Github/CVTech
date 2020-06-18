@@ -19,6 +19,5 @@ namespace Domaine.Entities
 
         public DateTime ModifDate { get; set; }
         public string UpdateMsg { get; set; }
-
     }
 }
